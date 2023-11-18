@@ -1,11 +1,11 @@
 # go-sh
 go写的shell脚本处理包，为提高工作效率而开发
-- 支持执行多条命令，并可自定义实时输出方法
-- 支持执行ID自定义生成方法，便于追踪执行记录
-- 支持快捷指定shell类型和[Set-Builtin](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html)
-- 支持获取执行完所在的工作目录，便于指定下一次执行的工作目录
-- 支持根据命令生成脚本文件去执行
-- 支持等待所有后台任务结束
+- 支持执行多条命令，并等待所有后台任务结束
+- 自定义实时输出方式
+- 自定义执行ID生成方式，便于追踪执行记录
+- 可快捷指定shell类型和[Set-Builtin](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html)
+- 支持获取执行完所在的工作目录，便于设置下一次执行的工作目录
+- 支持根据命令生成脚本文件去执行，可存储每次执行脚本
 
 ## Contents
 - [Installation](#Installation)
