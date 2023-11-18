@@ -23,6 +23,16 @@ func main() {
 	// 后台执行
 	e.AddCommand("sleep 5 &")
 
+	// 添加多行脚本，配合存储可以生成脚本文件，不调用Run()就不会执行
+	e.AddRawCommand([]byte(`
+# hello world
+hello() {
+	echo hello world
+}
+
+hello
+`))
+
 	if err = e.Run("echo command-1 | cut -d '-' -f2", "echo command2"); err != nil {
 		fmt.Printf("exec fail:%s\n", err)
 	}
@@ -32,9 +42,10 @@ func main() {
 
 /*
 [go-sh] /bin/bash -ex -o pipefail
-+ echo pwd: go-sh
-pwd: go-sh
 + cd /
++ hello
++ echo hello world
+hello world
 + sleep 5
 + echo command-1
 + cut -d - -f2
