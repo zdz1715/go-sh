@@ -6,11 +6,13 @@ go写的shell脚本处理包，为提高工作效率而开发
 - 可快捷指定shell类型和[Set-Builtin](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html)
 - 支持获取执行完所在的工作目录，便于设置下一次执行的工作目录
 - 支持根据命令生成脚本文件去执行，可存储每次执行脚本
+- 可全局设置一些选项，减少每次生成去设置的工作量
 
 ## Contents
 - [Installation](#Installation)
 - [Quick start](#quick-start)
 - [Examples](#examples)
+- [Global Setting](#global-setting)
 ## Installation
 ```shell
 go get -u github.com/zdz1715/go-sh@latest
@@ -84,3 +86,39 @@ exec last work dir: /
 - [Custom Output](./examples/custom-output/main.go)
 - [Custom ID](./examples/custom-id/main.go)
 
+## global-setting
+> 如果没有单独的设置，全局设置则会覆盖，有则不会覆盖
+
+```go
+package main
+
+import (
+	"github.com/zdz1715/go-sh"
+	"github.com/zdz1715/go-sh/shell"
+)
+
+func main() {
+	// 设置全局执行的工作目录
+	sh.SetGlobalExecWorkDir("/usr")
+	// 设置全局执行的用户
+	sh.SetGlobalExecUser("root")
+	// 设置全局执行的输出方法
+	sh.SetGlobalExecOutput(func(num int, line []byte) {
+
+	})
+	// 设置全局执行脚本存储方式
+	sh.SetGlobalStorage(&sh.Storage{
+		Dir:          "/tmp",
+		NotAutoClean: true,
+	})
+	// 设置全局的id生成方式
+	sh.SetGlobalIDCreator(func() string {
+		return "fixed"
+	})
+
+	// 设置全局的shell 类型
+	sh.SetGlobalShell(&shell.Shell{
+		Type: shell.Sh,
+    })
+}
+```

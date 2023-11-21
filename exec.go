@@ -37,26 +37,32 @@ type ExecOptions struct {
 	Output    func(num int, line []byte)
 }
 
-func defaultExecOptions(execOpts ...*ExecOptions) *ExecOptions {
-
+func parseExecOptions(execOpts ...*ExecOptions) *ExecOptions {
 	opts := new(ExecOptions)
 	if len(execOpts) > 0 && execOpts[0] != nil {
 		opts = execOpts[0]
 	}
-	if opts.IDCreator == nil {
-		opts.IDCreator = XidCreator
+	if opts.IDCreator == nil && globalExecOptions != nil {
+		opts.IDCreator = globalExecOptions.IDCreator
 	}
-	if opts.Shell == nil {
-		opts.Shell = &shell.Shell{
-			Type: shell.Bash,
-			Set:  shell.EXPipeFail,
-		}
+	if opts.Shell == nil && globalExecOptions != nil {
+		opts.Shell = globalExecOptions.Shell
 	}
 
-	if opts.Output == nil {
-		opts.Output = func(num int, line []byte) {
-			fmt.Fprintln(os.Stderr, bytesToString(line))
-		}
+	if opts.Output == nil && globalExecOptions != nil {
+		opts.Output = globalExecOptions.Output
+	}
+
+	if opts.Storage == nil && globalExecOptions != nil {
+		opts.Storage = globalExecOptions.Storage
+	}
+
+	if opts.User == "" && globalExecOptions != nil {
+		opts.User = globalExecOptions.User
+	}
+
+	if opts.WorkDir == "" && globalExecOptions != nil {
+		opts.WorkDir = globalExecOptions.WorkDir
 	}
 
 	return opts
@@ -80,7 +86,7 @@ type Exec struct {
 }
 
 func NewExec(ctx context.Context, execOpts ...*ExecOptions) (*Exec, error) {
-	opts := defaultExecOptions(execOpts...)
+	opts := parseExecOptions(execOpts...)
 
 	e := &Exec{
 		Context:      ctx,
