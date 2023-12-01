@@ -8,7 +8,7 @@ import (
 )
 
 func TestExec_Run(t *testing.T) {
-	e, err := NewExec(context.Background())
+	e, err := NewExec()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -24,7 +24,7 @@ func TestExec_RunWithTimeout(t *testing.T) {
 	// 设置超时时间 5s
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
-	e, err := NewExec(ctx, &ExecOptions{
+	e, err := NewExecContext(ctx, &ExecOptions{
 		//User: "root",
 		WorkDir: "/",
 		//Storage: &Storage{
@@ -62,4 +62,28 @@ docker_ps() {
 		t.Fatal(err)
 	}
 	t.Logf("last work dir: %s", e.LastWorkDir)
+}
+
+func TestExec_Cancel(t *testing.T) {
+	e, err := NewExec(&ExecOptions{
+		Storage: &Storage{
+			Dir: "/tmp",
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	go func() {
+		// 2s后停止
+		time.Sleep(2 * time.Second)
+		e.Cancel()
+	}()
+	err = e.Run("sleep 10")
+	if err != nil {
+		if IsDeadlineExceeded(err) {
+			t.Error("time out")
+		}
+		t.Error(err)
+	}
+	t.Logf("%+v\n", e)
 }

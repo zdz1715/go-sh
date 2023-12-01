@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 
@@ -10,7 +9,7 @@ import (
 )
 
 func main() {
-	e, err := sh.NewExec(context.Background(), &sh.ExecOptions{
+	e, err := sh.NewExec(&sh.ExecOptions{
 		Shell: &shell.Shell{
 			Type:  shell.Sh,
 			Set:   shell.ErrExit | shell.NoUnset,

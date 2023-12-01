@@ -85,7 +85,11 @@ type Exec struct {
 	stdout       io.ReadCloser
 }
 
-func NewExec(ctx context.Context, execOpts ...*ExecOptions) (*Exec, error) {
+func NewExec(execOpts ...*ExecOptions) (*Exec, error) {
+	return NewExecContext(context.Background(), execOpts...)
+}
+
+func NewExecContext(ctx context.Context, execOpts ...*ExecOptions) (*Exec, error) {
 	opts := parseExecOptions(execOpts...)
 
 	e := &Exec{
@@ -196,6 +200,7 @@ func (e *Exec) Finished() bool {
 
 // Cancel this execution
 func (e *Exec) Cancel() error {
+	e.setFinished()
 	if e.Cmd != nil && e.Cmd.Process != nil && e.Cmd.ProcessState == nil {
 		return e.Cmd.Process.Kill()
 	}

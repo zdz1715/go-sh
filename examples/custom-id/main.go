@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"crypto/rand"
 	"fmt"
 
@@ -10,7 +9,7 @@ import (
 
 func main() {
 
-	e, err := sh.NewExec(context.Background(), &sh.ExecOptions{
+	e, err := sh.NewExec(&sh.ExecOptions{
 		IDCreator: func() string {
 			b := make([]byte, 16)
 			rand.Read(b)

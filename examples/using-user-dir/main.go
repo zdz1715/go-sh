@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/zdz1715/go-sh"
@@ -9,7 +8,7 @@ import (
 
 func main() {
 	dir := "/var/log"
-	e, err := sh.NewExec(context.Background(), &sh.ExecOptions{
+	e, err := sh.NewExec(&sh.ExecOptions{
 		User:    "root",
 		WorkDir: dir,
 	})

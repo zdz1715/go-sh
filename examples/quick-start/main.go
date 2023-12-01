@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 
@@ -9,7 +8,7 @@ import (
 )
 
 func main() {
-	e, err := sh.NewExec(context.Background())
+	e, err := sh.NewExec()
 	if err != nil {
 		fmt.Printf("new exec fail:%s\n", err)
 		return

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 
@@ -9,7 +8,7 @@ import (
 )
 
 func main() {
-	e, err := sh.NewExec(context.Background(), &sh.ExecOptions{
+	e, err := sh.NewExec(&sh.ExecOptions{
 		Output: func(num int, line []byte) {
 			fmt.Printf("%d| %s\n", num, string(line))
 		},

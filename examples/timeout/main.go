@@ -12,7 +12,7 @@ import (
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	e, err := sh.NewExec(ctx)
+	e, err := sh.NewExecContext(ctx)
 	if err != nil {
 		fmt.Printf("new exec fail:%s\n", err)
 		return

@@ -1,7 +1,6 @@
 package sh
 
 import (
-	"context"
 	"strings"
 	"testing"
 
@@ -18,7 +17,7 @@ func TestSetDefaultExecOptions(t *testing.T) {
 		NotAutoClean: true,
 	})
 
-	e1, err := NewExec(context.Background())
+	e1, err := NewExec()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -27,7 +26,7 @@ func TestSetDefaultExecOptions(t *testing.T) {
 
 	t.Log(strings.Repeat("-", 30))
 
-	e2, err := NewExec(context.Background())
+	e2, err := NewExec()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -35,7 +34,7 @@ func TestSetDefaultExecOptions(t *testing.T) {
 
 	t.Log(strings.Repeat("-", 30))
 
-	e3, err := NewExec(context.Background(), &ExecOptions{
+	e3, err := NewExec(&ExecOptions{
 		WorkDir: "/usr/local",
 	})
 	if err != nil {
