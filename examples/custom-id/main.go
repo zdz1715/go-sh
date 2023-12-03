@@ -23,5 +23,5 @@ func main() {
 		return
 	}
 
-	fmt.Println("exec id:", e.ID)
+	fmt.Println("exec id:", e.ID())
 }

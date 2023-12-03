@@ -7,7 +7,7 @@ import (
 	"github.com/zdz1715/go-sh/shell"
 )
 
-var globalExecOptions = &ExecOptions{
+var gExecOptions = &ExecOptions{
 	IDCreator: XidCreator,
 	Shell: &shell.Shell{
 		Type: shell.Bash,
@@ -28,28 +28,28 @@ var globalExecOptions = &ExecOptions{
 // If the working directory has been set separately,
 // it will not be overwritten.
 func SetGlobalExecWorkDir(dir string) {
-	globalExecOptions.WorkDir = dir
+	gExecOptions.WorkDir = dir
 }
 
 // SetGlobalExecUser Sets the user for execution globally.
 // If the user has been set separately,
 // it will not be overwritten.
 func SetGlobalExecUser(user string) {
-	globalExecOptions.User = user
+	gExecOptions.User = user
 }
 
 // SetGlobalExecOutput Sets the output func for execution globally.
 // If the output func has been set separately,
 // it will not be overwritten.
 func SetGlobalExecOutput(f func(num int, line []byte)) {
-	globalExecOptions.Output = f
+	gExecOptions.Output = f
 }
 
 // SetGlobalStorage Sets the storage for execution globally.
 // If the storage has been set separately,
 // it will not be overwritten.
 func SetGlobalStorage(storage *Storage) {
-	globalExecOptions.Storage = storage
+	gExecOptions.Storage = storage
 }
 
 // SetGlobalIDCreator Sets the ID Creator for execution globally.
@@ -59,7 +59,7 @@ func SetGlobalIDCreator(creator IDCreator) {
 	if creator == nil {
 		return
 	}
-	globalExecOptions.IDCreator = creator
+	gExecOptions.IDCreator = creator
 }
 
 // SetGlobalShell Sets the shell for execution globally.
@@ -69,5 +69,5 @@ func SetGlobalShell(shell *shell.Shell) {
 	if shell == nil {
 		return
 	}
-	globalExecOptions.Shell = shell
+	gExecOptions.Shell = shell
 }

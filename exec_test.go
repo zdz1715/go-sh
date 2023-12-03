@@ -39,12 +39,6 @@ func TestExec_RunWithTimeout(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	//go func() {
-	//	// 也可以手动停止,2s后停止
-	//	time.Sleep(2 * time.Second)
-	//	e.Cancel()
-	//}()
-
 	t.Logf("exec: %s", e.String())
 	_ = e.AddCommand("id")
 	_ = e.AddCommand(`
@@ -57,18 +51,20 @@ docker_ps() {
 	err = e.Run("docker_ps", "sleep 10&", "echo hello world")
 	if err != nil {
 		if IsDeadlineExceeded(err) {
-			t.Fatal("time out")
+			t.Error("time out")
 		}
-		t.Fatal(err)
+		t.Error(err)
 	}
-	t.Logf("last work dir: %s", e.LastWorkDir)
+	t.Logf("finished: %+v lastWorkDir: %s\n", e.finished, e.GetLastWorkDir())
 }
 
 func TestExec_Cancel(t *testing.T) {
 	e, err := NewExec(&ExecOptions{
 		Storage: &Storage{
 			Dir: "/tmp",
+			//NotAutoClean: true,
 		},
+		//Shell: &shell.Shell{},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -85,5 +81,5 @@ func TestExec_Cancel(t *testing.T) {
 		}
 		t.Error(err)
 	}
-	t.Logf("%+v\n", e)
+	t.Logf("finished: %+v lastWorkDir: %s\n", e.finished, e.GetLastWorkDir())
 }

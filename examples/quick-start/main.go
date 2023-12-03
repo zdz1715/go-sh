@@ -36,7 +36,7 @@ hello
 		fmt.Printf("exec fail:%s\n", err)
 	}
 
-	fmt.Println("exec last work dir:", e.LastWorkDir)
+	fmt.Println("exec last work dir:", e.GetLastWorkDir())
 }
 
 /*

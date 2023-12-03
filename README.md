@@ -58,7 +58,7 @@ hello
 		fmt.Printf("exec fail:%s\n", err)
 	}
 
-	fmt.Println("exec last work dir:", e.LastWorkDir)
+	fmt.Println("exec last work dir:", e.GetLastWorkDir())
 }
 
 /*
@@ -85,39 +85,50 @@ exec last work dir: /
 - [Custom Output](./examples/custom-output/main.go)
 - [Custom ID](./examples/custom-id/main.go)
 
-## global-setting
+## 全局设置执行选项
 > 如果没有单独的设置，全局设置则会覆盖，有则不会覆盖
 
 ```go
 package main
 
 import (
-	"github.com/zdz1715/go-sh"
+	"fmt"
+
 	"github.com/zdz1715/go-sh/shell"
+
+	"github.com/zdz1715/go-sh"
 )
 
 func main() {
 	// 设置全局执行的工作目录
 	sh.SetGlobalExecWorkDir("/usr")
 	// 设置全局执行的用户
-	sh.SetGlobalExecUser("root")
+	sh.SetGlobalExecUser("")
 	// 设置全局执行的输出方法
 	sh.SetGlobalExecOutput(func(num int, line []byte) {
-
+		fmt.Println(string(line))
 	})
 	// 设置全局执行脚本存储方式
 	sh.SetGlobalStorage(&sh.Storage{
-		Dir:          "/tmp",
-		NotAutoClean: true,
+		Dir: "/tmp",
+		//NotAutoClean: true,
 	})
 	// 设置全局的id生成方式
 	sh.SetGlobalIDCreator(func() string {
-		return "fixed"
+		return "jenkins-" + sh.XidCreator()
 	})
 
 	// 设置全局的shell 类型
 	sh.SetGlobalShell(&shell.Shell{
 		Type: shell.Sh,
-    })
+	})
+
+	e1, _ := sh.NewExec()
+	e2, _ := sh.NewExec()
+	e3, _ := sh.NewExec()
+	e1.Run("echo e1: $(pwd)")
+	e2.Run("echo e2: $(pwd)")
+	e3.Run("echo e3: $(pwd)")
 }
+
 ```
