@@ -148,6 +148,9 @@ func (e *Exec) setFinished() {
 		}
 
 		if e.cmd.Process.Pid > 0 {
+			// 关闭进程组，包括子进程
+			// 只调用c.cmd.Process.Kill()，子进程不会被杀死，原因来自go语言
+			// see: https://github.com/golang/go/issues/23019
 			_ = syscall.Kill(-e.cmd.Process.Pid, syscall.SIGKILL)
 		}
 	}
