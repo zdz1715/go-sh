@@ -143,18 +143,20 @@ func (e *Exec) setFinished() {
 			err = e.opts.Storage.RemoveOrTruncate(e.file, int64(e.finishedRawLen))
 			e.setErr(err, false)
 		}
-		err = e.stdin.Close()
-		e.setErr(err, false)
+		if err = e.stdin.Close(); err != nil {
+			e.setErr(err, false)
+		}
+
+		if e.cmd.Process.Pid > 0 {
+			_ = syscall.Kill(-e.cmd.Process.Pid, syscall.SIGKILL)
+		}
 	}
 }
 
 // Cancel this execution
 func (e *Exec) Cancel() error {
 	defer e.setFinished()
-	if e.cmd != nil && e.cmd.Process != nil && e.cmd.ProcessState == nil {
-		return e.cmd.Process.Kill()
-	}
-	return nil
+	return e.err
 }
 
 func (e *Exec) AddCommand(name string, args ...string) error {

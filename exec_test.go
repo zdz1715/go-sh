@@ -70,11 +70,13 @@ func TestExec_Cancel(t *testing.T) {
 		t.Fatal(err)
 	}
 	go func() {
-		// 2s后停止
-		time.Sleep(2 * time.Second)
+		// 10s后停止
+		time.Sleep(10 * time.Second)
 		e.Cancel()
 	}()
-	err = e.Run("sleep 10")
+	// 子进程
+	_ = e.AddCommand("sleep 30&")
+	err = e.Run("sleep 20")
 	if err != nil {
 		if IsDeadlineExceeded(err) {
 			t.Error("time out")
